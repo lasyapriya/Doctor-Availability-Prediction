@@ -230,14 +230,12 @@ body::before {
         return;
     }
 
-    fetch("http://127.0.0.1:5000/predict", {
-        method: "POST",
-        headers: {
-            "Accept": displayOnly ? "application/json" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ time: time })
-    })
+    fetch("https://doctor-availability-prediction.onrender.com/predict", { 
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+})
+
     .then(response => {
         if (displayOnly) {
             return response.json();

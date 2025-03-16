@@ -34,45 +34,45 @@ df["Speciality"] = label_encoder.transform(df["Speciality"])
 def serve_html():
     return send_file( "index.html")  # Serving from the current directory
 
-@app.route("/predict", methods=["GET", "POST"])
+@app.route("/predict", methods=["POST"])
 def predict():
-    if request.method == "GET":
-        return jsonify({"message": "Use POST with time data"}), 200
-
     try:
         data = request.json
-        print("Received request data:", data)
-
         input_time = data.get("time", "").strip()
+
         if not input_time:
             return jsonify({"error": "Time is required"}), 400
 
         try:
             input_hour = datetime.datetime.strptime(input_time, "%H:%M").hour
-            print(f"✅ Parsed hour: {input_hour}")
         except ValueError:
             return jsonify({"error": "Invalid time format. Use HH:MM."}), 400
 
-        print("Columns in dataset after processing:", df.columns)
-
-        # Ensure 'Login Hour' exists
-        if "Login Hour" not in df.columns:
-            df["Login Hour"] = pd.to_datetime(df["Login Time"], errors='coerce').dt.hour
-            df.dropna(subset=["Login Hour"], inplace=True)
-
         doctors_active = df[df["Login Hour"] == input_hour]
-        print(f"✅ Doctors found at {input_hour}: {len(doctors_active)}")
-
         if doctors_active.empty:
-            return jsonify([])
+            return jsonify([])  # No doctors found
+
+        # Ensure necessary columns exist
+        if "Usage Time (mins)" not in doctors_active or "Speciality" not in doctors_active:
+            return jsonify({"error": "Invalid dataset format"}), 500
 
         features = doctors_active[["Login Hour", "Usage Time (mins)", "Count of Survey Attempts", "Speciality"]]
-        print("Feature data being passed to model:\n", features.head())
-
-        # Check for missing values
         if features.isnull().values.any():
-            print("❌ Error: Missing values detected in features!")
             return jsonify({"error": "Missing values in data"}), 500
+
+        predictions = model.predict(features)
+        doctors_active = doctors_active.assign(Prediction=predictions)
+        final_list = doctors_active[doctors_active["Prediction"] == 1]
+        npis_to_export = final_list["NPI"].tolist()
+
+        if not npis_to_export:
+            return jsonify([])
+
+        return jsonify(npis_to_export)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
         predictions = model.predict(features)
         print("✅ Model Predictions:", predictions)

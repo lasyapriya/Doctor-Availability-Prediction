@@ -223,30 +223,50 @@ body::before {
         }
 
         function predictDoctors(displayOnly) {
-            let time = document.getElementById("time").value.trim();
+    let time = document.getElementById("time").value.trim();
 
-            if (!time) {
-                alert("Please enter a valid time in HH:MM format.");
-                return;
-            }
+    if (!time) {
+        alert("Please enter a valid time in HH:MM format.");
+        return;
+    }
 
-            fetch("http://127.0.0.1:5000/predict", {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ time: time })
-            })
-            .then(response => response.json())
-            .then(data => {
-                let resultDiv = document.getElementById("result");
-                let resultBox = document.getElementById("resultBox");
-                resultDiv.innerHTML = data.length === 0 ? "No doctors available for the specified time." : "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
-                resultBox.style.display = "block";
-            })
-            .catch(error => alert("An error occurred while fetching the data."));
+    fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+            "Accept": displayOnly ? "application/json" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ time: time })
+    })
+    .then(response => {
+        if (displayOnly) {
+            return response.json();
+        } else {
+            return response.blob(); // Convert response to a Blob for file download
         }
+    })
+    .then(data => {
+        if (displayOnly) {
+            let resultDiv = document.getElementById("result");
+            let resultBox = document.getElementById("resultBox");
+            resultDiv.innerHTML = data.length === 0 ? "No doctors available for the specified time." : "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+            resultBox.style.display = "block";
+        } else {
+            // Create a link element to trigger the download
+            let blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement("a");
+            a.href = url;
+            a.download = "predicted_npis.xlsx";
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+    })
+    .catch(error => alert("An error occurred while fetching the data."));
+}
+
     </script>
 </body>
 </html>

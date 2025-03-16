@@ -222,7 +222,7 @@ body::before {
             }, 5000);
         }
 
-        function predictDoctors(displayOnly) {
+       function predictDoctors(displayOnly) {
     let time = document.getElementById("time").value.trim();
 
     if (!time) {
@@ -231,11 +231,10 @@ body::before {
     }
 
     fetch("https://doctor-availability-prediction.onrender.com/predict", { 
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json" }
-})
-
+        method: "POST",
+        body: JSON.stringify({ time: time }), // Fix: Send actual data
+        headers: { "Content-Type": "application/json" }
+    })
     .then(response => {
         if (displayOnly) {
             return response.json();
@@ -247,10 +246,11 @@ body::before {
         if (displayOnly) {
             let resultDiv = document.getElementById("result");
             let resultBox = document.getElementById("resultBox");
-            resultDiv.innerHTML = data.length === 0 ? "No doctors available for the specified time." : "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+            resultDiv.innerHTML = data.length === 0 
+                ? "No doctors available for the specified time." 
+                : "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
             resultBox.style.display = "block";
         } else {
-            // Create a link element to trigger the download
             let blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
             let url = window.URL.createObjectURL(blob);
             let a = document.createElement("a");
@@ -264,6 +264,7 @@ body::before {
     })
     .catch(error => alert("An error occurred while fetching the data."));
 }
+
 
     </script>
 </body>

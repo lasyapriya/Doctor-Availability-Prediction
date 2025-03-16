@@ -5,50 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Prediction</title>
     <style>
-        
-           /* Floating medical-themed particles */
-body::before {
-    font-family: 'Lora', serif;
+        /* Floating medical-themed particles */
+        body::before {
+            font-family: 'Lora', serif;
             text-align: center;
             margin: 0;
-    content: "";
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    pointer-events: none;
-    background-image: url('https://cdn-icons-png.flaticon.com/512/3774/3774299.png'), 
-                      url('https://img.freepik.com/premium-vector/pills-capsules-icon-flat-style-medical-tablet-vector-illustration-isolated-background-healthcare-drug-sign-business-concept_157943-24465.jpg?w=900'); 
-    background-repeat: repeat;
-    background-size: 100px, 90px;
-    opacity: 0.20;
-    animation: floatIcons 30s linear infinite;
-}
-
-@keyframes floatIcons {
-    0% { background-position: 0% 100%, 100% 0%; }
-    50% { background-position: 50% 50%, 50% 50%; }
-    100% { background-position: 0% 100%, 100% 0%; }
-}
-
-        .heartbeat-image {
-            width: 80px;
-            position: absolute;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: heartbeat 1.5s infinite;
+            content: "";
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            pointer-events: none;
+            background-image: url('https://cdn-icons-png.flaticon.com/512/3774/3774299.png'), 
+                              url('https://img.freepik.com/premium-vector/pills-capsules-icon-flat-style-medical-tablet-vector-illustration-isolated-background-healthcare-drug-sign-business-concept_157943-24465.jpg?w=900'); 
+            background-repeat: repeat;
+            background-size: 100px, 90px;
+            opacity: 0.20;
+            animation: floatIcons 30s linear infinite;
         }
 
-        @keyframes heartbeat {
-            0% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.2); }
-            100% { transform: translateX(-50%) scale(1); }
+        @keyframes floatIcons {
+            0% { background-position: 0% 100%, 100% 0%; }
+            50% { background-position: 50% 50%, 50% 50%; }
+            100% { background-position: 0% 100%, 100% 0%; }
         }
 
-
+        /* Loader Styling */
         #loader {
             position: fixed;
             top: 0;
@@ -85,41 +69,17 @@ body::before {
             align-items: center;
             height: 100vh;
         }
-        .side-image {
-    width: 250px;
-    height: 300px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.left {
-    left: 10px;
-}
-
-.right {
-    right: 10px;
-}
-
 
         .inner-box {
             background: white;
             padding: 25px;
             border-radius: 15px;
-            box-shadow:black;
             width: 500px;
             text-align: center;
             border: 3px solid #4682b4;
             background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
-            position: relative;
             background-size: cover;
             background-blend-mode: overlay;
-        }
-
-        h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #4682b4;
         }
 
         .thermo-input {
@@ -133,28 +93,6 @@ body::before {
             background: #000;
             color: gold;
             outline: none;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8), inset 0 0 5px rgba(138, 43, 226, 1);
-        }
-
-        .thermo-input:focus {
-            border-color: #ffcc00;
-            box-shadow: 0 0 15px gold, inset 0 0 10px #800080;
-        }
-
-
-        .thermometer-icon {
-            width: 30px;
-            height: 30px;
-            position: absolute;
-            top: 50px;
-            right: 15px;
-            animation: floatThermometer 1.5s infinite alternate;
-        }
-
-        @keyframes floatThermometer {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-8px); }
         }
 
         .check-btn {
@@ -166,14 +104,11 @@ body::before {
             background: #4682b4;
             color: white;
             cursor: pointer;
-            transition: background 0.3s ease-in-out, transform 0.2s;
         }
 
         .check-btn:hover {
             background: #5a9bd6;
             transform: scale(1.1);
-            color: #fff;
-            box-shadow: 0 0 10px #5a9bd6;
         }
 
         .output-box {
@@ -184,26 +119,21 @@ body::before {
             max-height: 200px;
             overflow-y: auto;
             background: #f0f8ff;
-            color:black;
+            color: black;
             display: none;
             text-align: left;
         }
     </style>
 </head>
-<body onload="hideLoader()">
+<body>
     <div id="loader">
         <img id="stethoscope" src="https://media.lordicon.com/icons/wired/gradient/1219-stethoscope.gif" alt="Loading...">
     </div>
 
     <div id="content" class="hidden outer-box">
-        <img src="https://media2.giphy.com/media/ReVJmdEtpCrHVjDgfj/200w.gif?cid=6c09b95221qrs27b84xqqzsgv2ecomx484ijg92bxzzqfz2u&ep=v1_stickers_search&rid=200w.gif&ct=s" class="heartbeat-image" alt="Heartbeat">
-        <img src="https://media0.giphy.com/media/htjclVJOgJ3sQprnCa/giphy.gif?cid=6c09b9521r6yilg72z3soew54cbasagr8rud41ho54vcnl33&ep=v1_stickers_search&rid=giphy.gif&ct=s" class="side-image left" alt="Left Image">
-<img src="https://media.baamboozle.com/uploads/images/81055/1617583122_70000_gif-url.gif" class="side-image right" alt="Right Image">
-
         <div class="inner-box">
             <h2>Doctor Availability Prediction</h2>
             <input type="text" id="time" class="thermo-input" placeholder="Enter Time (HH:MM)">
-            <img src="https://cdn-icons-png.flaticon.com/512/616/616490.png" class="thermometer-icon" alt="Thermometer">
             <button class="check-btn" onclick="predictDoctors(true)">Display Output</button>
             <button class="check-btn" onclick="predictDoctors(false)">Download NPI List</button>
             <div class="output-box" id="resultBox">
@@ -213,6 +143,11 @@ body::before {
     </div>
 
     <script>
+        // Ensuring hideLoader runs after window loads
+        window.onload = function () {
+            hideLoader();
+        };
+
         function hideLoader() {
             setTimeout(() => {
                 document.getElementById("loader").style.display = "none";
@@ -222,49 +157,47 @@ body::before {
             }, 5000);
         }
 
-       function predictDoctors(displayOnly) {
-    let time = document.getElementById("time").value.trim();
+        function predictDoctors(displayOnly) {
+            let time = document.getElementById("time").value.trim();
 
-    if (!time) {
-        alert("Please enter a valid time in HH:MM format.");
-        return;
-    }
+            if (!time) {
+                alert("Please enter a valid time in HH:MM format.");
+                return;
+            }
 
-    fetch("https://doctor-availability-prediction.onrender.com/predict", { 
-    method: "POST",
-    body: JSON.stringify({ time: time }),
-    headers: { "Content-Type": "application/json" }
-})
-.then(response => {
-    if (!response.ok) {
-        return response.json().then(err => { throw new Error(err.error || "Could not fetch data"); });
-    }
-    return displayOnly ? response.json() : response.blob();
-})
-.then(data => {
-    if (displayOnly) {
-        let resultDiv = document.getElementById("result");
-        let resultBox = document.getElementById("resultBox");
-        resultDiv.innerHTML = data.length === 0 
-            ? "No doctors available for the specified time." 
-            : "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
-        resultBox.style.display = "block";
-    } else {
-        let blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-        let url = window.URL.createObjectURL(blob);
-        let a = document.createElement("a");
-        a.href = url;
-        a.download = "predicted_npis.xlsx";
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-    }
-})
-.catch(error => alert(error.message));
-
-
-
+            fetch("https://doctor-availability-prediction.onrender.com/predict", { 
+                method: "POST",
+                body: JSON.stringify({ time: time }),
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.error || "Could not fetch data"); });
+                }
+                return displayOnly ? response.json() : response.blob();
+            })
+            .then(data => {
+                if (displayOnly) {
+                    let resultDiv = document.getElementById("result");
+                    let resultBox = document.getElementById("resultBox");
+                    resultDiv.innerHTML = data.length === 0 
+                        ? "No doctors available for the specified time." 
+                        : "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+                    resultBox.style.display = "block";
+                } else {
+                    let blob = new Blob([data], { type: "application/octet-stream" });
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement("a");
+                    a.href = url;
+                    a.download = "predicted_npis.xlsx";
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                }
+            })
+            .catch(error => alert(error.message));
+        }
     </script>
 </body>
 </html>

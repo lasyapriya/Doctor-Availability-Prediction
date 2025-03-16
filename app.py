@@ -32,7 +32,7 @@ df["Speciality"] = label_encoder.transform(df["Speciality"])
 # ✅ Home route to prevent 404 errors
 @app.route("/")
 def home():
-    return "Flask API is running! Use POST /predict to make predictions."
+   return render_template("index.html")
 
 @app.route("/predict", methods=["GET", "POST"])
 def predict():

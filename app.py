@@ -18,7 +18,7 @@ model = joblib.load("doctor_model.pkl")
 label_encoder = joblib.load("specialty_encoder.pkl")
 
 # ✅ Ensure dataset file exists
-dataset_path = r"C:\Users\admin\OneDrive\Desktop\examples\a_doctor_project\data.csv"
+dataset_path = "data.csv"
 if not os.path.exists(dataset_path):
     raise FileNotFoundError(f"Dataset file '{dataset_path}' not found. Place it in the same directory as app.py.")
 

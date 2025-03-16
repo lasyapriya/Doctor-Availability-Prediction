@@ -32,7 +32,7 @@ df["Speciality"] = label_encoder.transform(df["Speciality"])
 # ✅ Home route to prevent 404 errors
 @app.route("/")
 def serve_html():
-    return send_from_directory(".", "index.html")  # Serving from the current directory
+    return send_file(".", "index.html")  # Serving from the current directory
 
 @app.route("/predict", methods=["GET", "POST"])
 def predict():
